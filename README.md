@@ -1,18 +1,18 @@
 # Product-Dash
 
-    Product management,and ordering simple web application, built as side project to learn TypeORM. The application has features JWT authentication, manage product dashboard(CRUD), and order product.
+Product management,and ordering simple web application, built as side project to learn TypeORM. The application has features JWT authentication, manage product dashboard(CRUD), and order product.
 
 ## Built With
 
-    - React.js
-    - Redux Toolkit
-    - TypeORM
-    - Node.js
-    - Express.js
-    - TypeScript
-    - JWT
-    - Express-Validation
-    - MySQL
+    ✔️ React.js
+    ✔️ Redux Toolkit
+    ✔️ TypeORM
+    ✔️ Node.js
+    ✔️ Express.js
+    ✔️ TypeScript
+    ✔️ JWT
+    ✔️ Express-Validation
+    ✔️ MySQL
 
 ## Online demo
 

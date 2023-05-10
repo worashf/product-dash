@@ -21,10 +21,10 @@ Product management,and ordering simple web application, built as side project to
 To get the copy of this project in your computer,clone this repository or just download it.
 Prerequisites
 
-    - Code editor like vs code
-    - Node.js installed
-    - TypeScript installed
-    - MySQL installed
+    ⤵️ Code editor like vs code
+    ⤵️ Node.js installed
+    ⤵️ TypeScript installed
+    ⤵️ MySQL installed
 
 Setup
 

@@ -2,8 +2,12 @@ import { Request, Response } from "express";
 import * as bcrypt from "bcryptjs";
 import * as jwt from "jsonwebtoken";
 import { registrationValidation } from "../validations/auth.validation";
-import { saveUser, findUser } from "../repositories/user.repository";
-import { generateJwtToken } from "../utils/jwt.token";
+import {
+  saveUser,
+  findUser,
+  getUserById,
+} from "../repositories/user.repository";
+import { generateJwtToken, verifyToken } from "../utils/jwt.token";
 export const register = async (req: Request, res: Response) => {
   const { firstName, lastName, email, password, confirmPassword } = req.body;
 
@@ -90,5 +94,24 @@ export const login = async (req: Request, res: Response) => {
       .catch((err: any) => {
         throw new Error(err);
       });
+  }
+};
+
+export const authenticatedUser = async (req: Request, res: Response) => {
+  const token = req.cookies["token"];
+  // const { }id: any;
+  const { id } = verifyToken(token);
+  console.log(id, 11);
+  if (!id) {
+    res.status(401).json({
+      message: "unauthenticated user",
+      success: false,
+    });
+  } else {
+    const { password, ...user } = await getUserById(id);
+    res.status(200).json({
+      user,
+      token,
+    });
   }
 };

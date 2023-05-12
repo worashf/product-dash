@@ -24,3 +24,11 @@ export const findUser = async (email: string) => {
     throw new Error(error);
   }
 };
+
+export const getUserById = async (id: number) => {
+  try {
+    return await userRepository.findOneBy({ id: id });
+  } catch (error) {
+    throw new Error(error);
+  }
+};

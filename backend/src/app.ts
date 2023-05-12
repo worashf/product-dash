@@ -1,15 +1,20 @@
-import express, { Request, Response } from "express";
+import express from "express";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import authRoute from "./routes/auth.route";
 const app = express();
-const options: Object = {
-  origin: "http://localhost:3000",
-};
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors(options));
+app.use(cookieParser());
+app.use(
+  cors({
+    credentials: true,
+    origin: "http://localhost:3000",
+  })
+);
 
 //Enable routes fro the application
-app.use("/api", authRoute);
+app.use("/api/v1/users", authRoute);
 
 export default app;

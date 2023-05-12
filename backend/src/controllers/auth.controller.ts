@@ -98,20 +98,42 @@ export const login = async (req: Request, res: Response) => {
 };
 
 export const authenticatedUser = async (req: Request, res: Response) => {
-  const token = req.cookies["token"];
-  // const { }id: any;
-  const { id } = verifyToken(token);
-  console.log(id, 11);
-  if (!id) {
+  try {
+    const token = req.cookies["token"];
+    if (token) {
+      const { id } = verifyToken(token);
+
+      if (!id) {
+        res.status(401).json({
+          message: "unauthenticated user",
+          success: false,
+        });
+      } else {
+        const { password, ...user } = await getUserById(id);
+        res.status(200).json({
+          user,
+          token,
+        });
+      }
+    } else {
+      res.status(401).json({
+        message: "unauthenticated user, No token found",
+        success: false,
+      });
+    }
+  } catch (err) {
     res.status(401).json({
       message: "unauthenticated user",
       success: false,
-    });
-  } else {
-    const { password, ...user } = await getUserById(id);
-    res.status(200).json({
-      user,
-      token,
+      err,
     });
   }
+};
+
+export const logout = async (req: Request, res: Response) => {
+  res.cookie("token", null, { maxAge: 0 });
+  res.status(200).json({
+    message: "Logout successfully!",
+    seccuss: true,
+  });
 };

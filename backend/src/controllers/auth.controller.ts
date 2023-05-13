@@ -6,10 +6,18 @@ import {
   saveUser,
   findUser,
   getUserById,
+  updateUser,
 } from "../repositories/user.repository";
-import { generateJwtToken, verifyToken } from "../utils/jwt.token";
+import { generateJwtToken } from "../utils/jwt.token";
 export const register = async (req: Request, res: Response) => {
-  const { firstName, lastName, email, password, confirmPassword } = req.body;
+  let { firstName, lastName, email, password, confirmPassword } = req.body;
+  password = password.toString();
+  confirmPassword = confirmPassword.toString();
+  console.log(
+    typeof password,
+    typeof confirmPassword,
+    password === confirmPassword
+  );
 
   try {
     const { error } = registrationValidation.validate({
@@ -110,4 +118,52 @@ export const logout = async (req: Request, res: Response) => {
     message: "Logout successfully!",
     seccuss: true,
   });
+};
+
+export const updateUserProfile = async (req: Request, res: Response) => {
+  try {
+    const { id } = req["user"];
+    const { firstName, lastName, email } = req.body;
+    await updateUser(id, { firstName, lastName, email });
+
+    const { password, ...user } = await getUserById(id);
+    res.status(200).json({
+      success: true,
+      user,
+    });
+  } catch (err) {
+    throw new Error(err);
+  }
+};
+
+export const updatePassword = async (req: Request, res: Response) => {
+  try {
+    const { id } = req["user"];
+    let { password, oldPassword, confirmPassword } = req.body;
+
+    if (password !== confirmPassword) {
+      res.status(400).json({
+        message: "Password do not match!",
+        success: false,
+      });
+    } else {
+      const user = await getUserById(id);
+
+      const isMatch = await bcrypt.compare(oldPassword, user.password);
+      if (!isMatch) {
+        res.status(400).json({
+          success: false,
+          message: "Old password is incorect",
+        });
+      } else {
+        await updateUser(id, { password: await bcrypt.hash(password, 10) });
+        res.status(200).json({
+          success: true,
+          user,
+        });
+      }
+    }
+  } catch (err) {
+    throw new Error(err);
+  }
 };

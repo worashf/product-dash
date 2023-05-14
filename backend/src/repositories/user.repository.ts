@@ -10,8 +10,6 @@ type userType = {
 const userRepository = connectDB.getRepository(User);
 export const saveUser = async (user: userType) => {
   try {
-    const us = await userRepository.create(user);
-    console.log(us, "fdf");
     return await userRepository.save(user);
   } catch (err) {
     throw new Error(err);
@@ -52,4 +50,20 @@ export const updateUser = async (
     updateData.password = userInfo.password;
   }
   return await userRepository.update({ id: userId }, updateData);
+};
+
+export const findUsers = async () => {
+  try {
+    return await userRepository.find();
+  } catch (err) {
+    throw new Error("Some thing went wrong,can not retrive users!");
+  }
+};
+
+export const deleteUser = async (id: number) => {
+  try {
+    return await userRepository.delete(id);
+  } catch (err) {
+    throw new Error("Some thing went wrong,user can not deleted!");
+  }
 };
